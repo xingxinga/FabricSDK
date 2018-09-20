@@ -3,27 +3,41 @@ package com.chsoft.localTest;
 import java.io.File;
 
 import org.hyperledger.fabric.sdk.ChaincodeEndorsementPolicy;
-import org.hyperledger.fabric.sdk.ChannelConfiguration;
+import org.springframework.stereotype.Component;
 
-import com.chsoft.newFabric.FabricChaincode;
-import com.chsoft.newFabric.FabricClient;
-import com.chsoft.newFabric.FabricOrderer;
-import com.chsoft.newFabric.FabricPeer;
-import com.chsoft.newFabric.FabricUser;;
-
+import com.chsoft.aop.ClientMethod;
+import com.chsoft.fabric.FabricChaincode;
+import com.chsoft.fabric.FabricClient;
+import com.chsoft.fabric.FabricOrderer;
+import com.chsoft.fabric.FabricPeer;
+import com.chsoft.fabric.FabricUser;;
+@Component
 public class ChannelTest {
 	
 	public E2e_Config config;
 	public FabricUser org1Admin;
 	public FabricOrderer orderer;
+	
 	public FabricClient fabricClient;
 	public FabricPeer fabricPeer;
+	public FabricChaincode fabricChaincode;
+	public static String channelName = "mychannel";
 	public ChannelTest() throws Exception{
 		config = new E2e_Config();
 		org1Admin = config.getAdminList().get(0);
 		orderer = config.getOrdererList().get(0);
 		fabricClient = new FabricClient(org1Admin);
 		fabricPeer = config.getPeerList().get(0).get(0);
+		fabricChaincode = config.getFabricChaincode("mycc");
+	}
+	
+	public void init() throws Exception{
+		config = new E2e_Config();
+		org1Admin = config.getAdminList().get(0);
+		orderer = config.getOrdererList().get(0);
+		fabricClient = new FabricClient(org1Admin);
+		fabricPeer = config.getPeerList().get(0).get(0);
+		fabricChaincode = config.getFabricChaincode("mycc");
 	}
 	
 	public static void main(String[] args) throws Exception{
@@ -31,22 +45,26 @@ public class ChannelTest {
 		ChannelTest channelTest= new ChannelTest();
 		//channelTest.testCreateChannel();
 		//channelTest.testChannelJoin();
-		//channelTest.testQueryChannels();
-		channelTest.testPeerInstallChaincodePath();
+		channelTest.testQueryChannels();
 		//channelTest.testQueryInstalledChaincodes();
+		
+		//channelTest.testPeerInstallChaincodePath();
+		
 		//channelTest.testInstantiateChainCode();
+		
+		//channelTest.testQueryChainCode();
+		
+		//channelTest.testQueryInstantiateChainCode();
 	}
 	
 	public void testCreateChannel() throws Exception{
-		File configFile = new File("E:\\chsoft\\Git\\fabric-samples\\first-network\\channel-artifacts\\channel.tx");
-	    ChannelConfiguration channelConfiguration = new ChannelConfiguration(configFile);
-		fabricClient.createChannel("mychannel", orderer, channelConfiguration);
+		String configFilePath = "E:\\chsoft\\Git\\fabric-samples\\first-network\\channel-artifacts\\channel.tx";
+		fabricClient.createChannel("mychannel", orderer, configFilePath);
 		
 	}
 	
 	public void testChannelJoin() throws Exception{
-		FabricClient fabricClient = new FabricClient(org1Admin);
-		fabricClient.channelJoinPeer(fabricClient.getRunningChannel("mychannel", orderer), fabricPeer);
+		fabricClient.channelJoinPeer(channelName, fabricPeer);
 	}
 	
 	public void testQueryChannels() throws Exception{
@@ -54,11 +72,6 @@ public class ChannelTest {
 	}
 	
 	public void testPeerInstallChaincodePath() throws Exception{
-		FabricChaincode fabricChaincode = new FabricChaincode();
-		fabricChaincode.setChaincodeName("myccb");
-		fabricChaincode.setChaincodePath("github.com/chaincode/chaincode_example02/go/");
-		fabricChaincode.setChaincodeVersion("1.0");
-		fabricChaincode.setChaincodeFilePath("chaincode\\chaincode_example02\\go\\");
 		fabricClient.peerInstallChaincode(fabricChaincode, fabricPeer);
 	}
 	
@@ -67,17 +80,17 @@ public class ChannelTest {
 	}
 	
 	public void testInstantiateChainCode() throws Exception{
-		FabricChaincode fabricChaincode = new FabricChaincode();
-		fabricChaincode.setChaincodeName("mycc");
-		fabricChaincode.setChaincodePath("E:\\chsoft\\Git\\fabric-samples\\");
-		fabricChaincode.setChaincodeVersion("1.0");
-		fabricChaincode.setChaincodeFilePath("chaincode\\chaincode_example02\\go\\");
 	    ChaincodeEndorsementPolicy chaincodeEndorsementPolicy = new ChaincodeEndorsementPolicy();
 	    chaincodeEndorsementPolicy.fromYamlFile(new File(config.channlePath+"chaincodeendorsementpolicy.yaml"));
-	    fabricClient.peerInstantiateChainCode(fabricClient.getRunningChannel("mychannel", orderer),
-	    								      fabricPeer,fabricChaincode, chaincodeEndorsementPolicy);
+	    fabricClient.peerInstantiateChainCode(channelName,fabricPeer,fabricChaincode, chaincodeEndorsementPolicy);
 	}
 	
+	public void testQueryChainCode() throws Exception{
+		String[] queryArg = new String[] {  "a" };  
+		fabricClient.queryChaincode(channelName, fabricChaincode, "query",queryArg);
+	}
 	
-
+	public void testQueryInstantiateChainCode() throws Exception{
+		fabricClient.queryInstantiateChaincodes(channelName, fabricPeer);
+	}
 }

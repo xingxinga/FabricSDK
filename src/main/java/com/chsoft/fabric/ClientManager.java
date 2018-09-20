@@ -1,4 +1,4 @@
-package com.chsoft.newFabric;
+package com.chsoft.fabric;
 
 import org.hyperledger.fabric.sdk.HFClient;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;

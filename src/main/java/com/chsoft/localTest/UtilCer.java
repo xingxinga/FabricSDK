@@ -19,8 +19,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 
-import com.chsoft.newFabric.FabricUser;
-import com.chsoft.newFabric.UserEnrollement;
+import com.chsoft.fabric.FabricUser;
+import com.chsoft.fabric.UserEnrollement;
 
 /**
  * 

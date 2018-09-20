@@ -3,7 +3,7 @@ package com.chsoft.localTest;
 import org.hyperledger.fabric.sdk.HFClient;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
 
-import com.chsoft.newFabric.FabricUser;
+import com.chsoft.fabric.FabricUser;
 
 /**
  * 

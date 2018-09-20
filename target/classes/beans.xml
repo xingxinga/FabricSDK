@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop" 
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation=
+    "http://www.springframework.org/schema/beans    
+	 http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	 http://www.springframework.org/schema/aop   
+     http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+	 http://www.springframework.org/schema/context
+	 http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	 http://www.springframework.org/schema/mvc
+	 http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	 "> 
+	 <context:component-scan base-package="com.chsoft" />
+	 <aop:aspectj-autoproxy proxy-target-class="true"/> 
+	 <!-- <mvc:annotation-driven /> -->
+	 <!-- <bean class="com.aop.AopAction" id="AopAction"></bean>  --> 
+	 <!-- <aop:config>  
+        切点  
+        <aop:pointcut expression="execution(public void com.aop.AopDemo.*(..))" id="aop"/>  
+        切面 : ref 的值是 切面类的id  
+        <aop:aspect id="aspect" ref="AopAction">  
+            前置方法 : pointcut-ref 的值是 切点的id  
+            <aop:before method="beforeMethodXML" pointcut-ref="aop"/> 
+            <aop:after method="afterMethodXML" pointcut-ref="aop"/>   
+        </aop:aspect>  
+    </aop:config> -->
+</beans>

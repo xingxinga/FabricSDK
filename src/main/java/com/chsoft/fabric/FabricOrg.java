@@ -1,4 +1,4 @@
-package com.chsoft.newFabric;
+package com.chsoft.fabric;
 
 import java.io.File;
 import java.io.IOException;

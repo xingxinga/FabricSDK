@@ -1,5 +1,6 @@
-package com.chsoft.newFabric;
+package com.chsoft.fabric;
 
+import org.hyperledger.fabric.sdk.ChaincodeID;
 import org.hyperledger.fabric.sdk.TransactionRequest.Type;
 
 /**
@@ -13,19 +14,21 @@ import org.hyperledger.fabric.sdk.TransactionRequest.Type;
 public class FabricChaincode {
 
     /** 当前将要访问的智能合约所属频道名称 */
-    private String channelName; // ffetest
+    private String channelName; // mychannel
     /** 智能合约名称 */
-    private String chaincodeName; // ffetestcc
+    private String chaincodeName; // mycc
     /** 智能合约代码的路径 */
-    private String chaincodeFilePath; // github.com/hyperledger/fabric/xxx/chaincode/go/example/test
-    /** 智能合约在节点上的安装路径 */
-    private String chaincodePath; // github.com/hyperledger/fabric/xxx/chaincode/go/example/test
+    private String chaincodeFilePath; // E:\\chsoft\\Git\\fabric-samples\\chaincode\\chaincode_example02\\go\\
+    /** 智能合约在节点上的安装路径,可以随意赋值，标识作用 */
+    private String chaincodePath; // github.com/hyperledger/fabric/chaincode/go/
     /** 智能合约版本号 */
     private String chaincodeVersion; // 1.0
     /** 执行智能合约操作等待时间 */
     private int invokeWatiTime = 100000;
     /** 执行智能合约实例等待时间 */
     private int deployWatiTime = 120000;
+    
+    private ChaincodeID chaincodeID;
     
     // Chaincode language
     private Type chaincodeLanguage = Type.GO_LANG;
@@ -92,6 +95,14 @@ public class FabricChaincode {
 
 	public void setChaincodeLanguage(Type chaincodeLanguage) {
 		this.chaincodeLanguage = chaincodeLanguage;
+	}
+
+	public ChaincodeID getChaincodeID() {
+		return chaincodeID;
+	}
+
+	public void setChaincodeID(ChaincodeID chaincodeID) {
+		this.chaincodeID = chaincodeID;
 	}
 
 	

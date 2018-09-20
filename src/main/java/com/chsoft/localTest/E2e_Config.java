@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.hyperledger.fabric.sdk.ChaincodeID;
 
-import com.chsoft.newFabric.FabricOrderer;
-import com.chsoft.newFabric.FabricPeer;
-import com.chsoft.newFabric.FabricUser;
-import com.chsoft.newFabric.UserEnrollement;
+import com.chsoft.fabric.FabricChaincode;
+import com.chsoft.fabric.FabricOrderer;
+import com.chsoft.fabric.FabricPeer;
+import com.chsoft.fabric.FabricUser;
+import com.chsoft.fabric.UserEnrollement;
 
 public class E2e_Config {
 	
@@ -160,6 +162,20 @@ public class E2e_Config {
 	
 	public List<FabricOrderer> getOrdererList(){
 		return ordererList;
+	}
+	
+	public FabricChaincode getFabricChaincode(String name){
+		FabricChaincode fabricChaincode = new FabricChaincode();
+		fabricChaincode.setChaincodeName(name);
+		fabricChaincode.setChaincodePath("github.com/chaincode/chaincode_example02/go/");
+		fabricChaincode.setChaincodeVersion("1.0");
+		fabricChaincode.setChaincodeFilePath("E:\\chsoft\\Git\\fabric-samples\\chaincode\\chaincode_example02\\go\\");
+		ChaincodeID.Builder chaincodeIDBuilder = ChaincodeID.newBuilder().setName(fabricChaincode.getChaincodeName())
+                .setVersion(fabricChaincode.getChaincodeVersion());
+        chaincodeIDBuilder.setPath(fabricChaincode.getChaincodePath());
+        ChaincodeID chaincodeID = chaincodeIDBuilder.build();
+        fabricChaincode.setChaincodeID(chaincodeID);
+		return fabricChaincode;
 	}
 	
 }
