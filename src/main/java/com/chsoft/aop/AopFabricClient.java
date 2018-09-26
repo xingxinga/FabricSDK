@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +30,8 @@ import org.hyperledger.fabric.sdk.Peer;
 import org.hyperledger.fabric.sdk.Peer.PeerRole;
 import org.hyperledger.fabric.sdk.ProposalResponse;
 import org.hyperledger.fabric.sdk.QueryByChaincodeRequest;
+import org.hyperledger.fabric.sdk.SDKUtils;
+import org.hyperledger.fabric.sdk.TransactionProposalRequest;
 import org.hyperledger.fabric.sdk.TransactionRequest.Type;
 import org.springframework.stereotype.Component;
 
@@ -279,7 +282,6 @@ public class AopFabricClient {
 	
 	@FabricCreate(channel = 1,peer = 2)
 	public void queryChaincode(String channelName,FabricPeer fabricPeer,FabricChaincode fabricChaincode,String fcn, String[] args) throws Exception{
-		Map<String, String> resultMap = new HashMap<>();
         QueryByChaincodeRequest queryByChaincodeRequest = client.newQueryProposalRequest();
         queryByChaincodeRequest.setArgs(args);
         queryByChaincodeRequest.setFcn(fcn);
@@ -290,6 +292,24 @@ public class AopFabricClient {
         queryByChaincodeRequest.setTransientMap(tm2);
         Collection<ProposalResponse> queryProposals = channel.queryByChaincode(queryByChaincodeRequest);
         System.out.println("aa");
+	}
+	
+	@FabricCreate(channel = 1,orderer = 2,peer = 3)
+	public void invokeChaincode(String channelName,FabricOrderer fabricOrderer,FabricPeer fabricPeer,FabricChaincode fabricChaincode,String fcn, String[] args) throws Exception{
+        TransactionProposalRequest transactionProposalRequest = client.newTransactionProposalRequest();
+        transactionProposalRequest.setChaincodeID(fabricChaincode.getChaincodeID());
+        transactionProposalRequest.setChaincodeLanguage(fabricChaincode.getChaincodeLanguage());
+        transactionProposalRequest.setFcn(fcn);
+        transactionProposalRequest.setArgs(args);
+
+        Map<String, byte[]> tm2 = new HashMap<>();
+        tm2.put("HyperLedgerFabric", "TransactionProposalRequest:JavaSDK".getBytes(UTF_8));
+        tm2.put("method", "TransactionProposalRequest".getBytes(UTF_8));
+        tm2.put("result", ":)".getBytes(UTF_8));
+        transactionProposalRequest.setTransientMap(tm2);
+        Collection<ProposalResponse> transactionPropResp = channel.sendTransactionProposal(transactionProposalRequest);
+        Collection<Set<ProposalResponse>> proposalConsistencySets = SDKUtils.getProposalConsistencySets(transactionPropResp);
+        channel.sendTransaction(transactionPropResp);
 	}
 	
 	

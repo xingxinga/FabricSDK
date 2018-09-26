@@ -50,7 +50,7 @@ public class AopTest {
 		aopFabricClient.init(config.getAdminList().get(0));
 		org1Admin = config.getAdminList().get(0);
 		orderer = config.getOrdererList().get(0);
-		peer = config.getPeerList().get(0).get(1);
+		peer = config.getPeerList().get(0).get(0);
 		fabricChaincode = config.getFabricChaincode("mycc");
 	}
 	
@@ -106,6 +106,11 @@ public class AopTest {
 		aopFabricClient.queryChaincode(channelName, peer,fabricChaincode, "query",queryArg);
 	}
 	
+	@Test
+	public void invokeChainCodeTest() throws Exception{
+		String[] invokeArg = new String[] { "a","b","10"};  
+		aopFabricClient.invokeChaincode(channelName, orderer,peer,fabricChaincode, "invoke",invokeArg);
+	}
 	
 	
 }  

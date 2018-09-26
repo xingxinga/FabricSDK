@@ -60,7 +60,7 @@ public class FabricCreateAction {
         	Field ordererField = obj.getClass().getDeclaredField("orderer");
         	ordererField.setAccessible(true);
         	argumentOrderer = (FabricOrderer) arguments[fabricCreate.orderer()-1];
-        	orderer = client.newOrderer(argumentOrderer.getOrdererDomainName(), argumentOrderer.getOrdererLocation());
+        	orderer = client.newOrderer(argumentOrderer.getOrdererName(), argumentOrderer.getOrdererLocation());
         	ordererField.set(obj, orderer);
         }
         
