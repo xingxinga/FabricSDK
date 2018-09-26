@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD })
-public @interface ClientMethod {
-    
-    int channel() default -1; 
+public @interface FabricCreate {
     
     int peer() default -1;
     
     int orderer() default -1;
+    
+    int channel() default -1;
 }

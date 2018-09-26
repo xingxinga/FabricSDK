@@ -3,9 +3,9 @@ package com.chsoft.localTest;
 import java.io.File;
 
 import org.hyperledger.fabric.sdk.ChaincodeEndorsementPolicy;
+import org.hyperledger.fabric.sdk.ChannelConfiguration;
 import org.springframework.stereotype.Component;
 
-import com.chsoft.aop.ClientMethod;
 import com.chsoft.fabric.FabricChaincode;
 import com.chsoft.fabric.FabricClient;
 import com.chsoft.fabric.FabricOrderer;
@@ -59,12 +59,15 @@ public class ChannelTest {
 	
 	public void testCreateChannel() throws Exception{
 		String configFilePath = "E:\\chsoft\\Git\\fabric-samples\\first-network\\channel-artifacts\\channel.tx";
-		fabricClient.createChannel("mychannel", orderer, configFilePath);
+		
+		ChannelConfiguration channelConfiguration = new ChannelConfiguration(new File(configFilePath));
+		
+		fabricClient.createChannel("mychannel", orderer, channelConfiguration);
 		
 	}
 	
 	public void testChannelJoin() throws Exception{
-		fabricClient.channelJoinPeer(channelName, fabricPeer);
+		fabricClient.channelJoinPeer(fabricClient.getRunningChannel(channelName, orderer), fabricPeer);
 	}
 	
 	public void testQueryChannels() throws Exception{
@@ -82,15 +85,15 @@ public class ChannelTest {
 	public void testInstantiateChainCode() throws Exception{
 	    ChaincodeEndorsementPolicy chaincodeEndorsementPolicy = new ChaincodeEndorsementPolicy();
 	    chaincodeEndorsementPolicy.fromYamlFile(new File(config.channlePath+"chaincodeendorsementpolicy.yaml"));
-	    fabricClient.peerInstantiateChainCode(channelName,fabricPeer,fabricChaincode, chaincodeEndorsementPolicy);
+	    fabricClient.peerInstantiateChainCode(fabricClient.getRunningChannel(channelName, orderer),fabricPeer,fabricChaincode, chaincodeEndorsementPolicy);
 	}
 	
 	public void testQueryChainCode() throws Exception{
 		String[] queryArg = new String[] {  "a" };  
-		fabricClient.queryChaincode(channelName, fabricChaincode, "query",queryArg);
+		fabricClient.queryChaincode(fabricClient.getRunningChannel(channelName, null),fabricPeer, fabricChaincode, "query",queryArg);
 	}
 	
 	public void testQueryInstantiateChainCode() throws Exception{
-		fabricClient.queryInstantiateChaincodes(channelName, fabricPeer);
+		fabricClient.queryInstantiateChaincodes(fabricClient.getRunningChannel(channelName, null), fabricPeer);
 	}
 }

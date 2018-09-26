@@ -9,13 +9,14 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.hyperledger.fabric.sdk.ChaincodeID;
+import org.springframework.stereotype.Component;
 
 import com.chsoft.fabric.FabricChaincode;
 import com.chsoft.fabric.FabricOrderer;
 import com.chsoft.fabric.FabricPeer;
 import com.chsoft.fabric.FabricUser;
 import com.chsoft.fabric.UserEnrollement;
-
+@Component
 public class E2e_Config {
 	
 	public UtilCer utilCer;
@@ -64,6 +65,17 @@ public class E2e_Config {
 //		configUserList();
 	}
 	
+	public void init() throws Exception{
+		utilCer = new UtilCer();
+		adminList = new ArrayList<>();
+		userList = new ArrayList<>();
+		peerList = new ArrayList<>();
+		ordererList = new ArrayList<>();
+		configAdminList();
+		configOrdererList();
+		configPeerList();
+//		configUserList();
+	}
 	
 	public void configAdminList() throws Exception{
 		FabricUser fabricUser;
